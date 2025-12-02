@@ -16,10 +16,11 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            color: #333;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             background: white;
             border-radius: 15px;
@@ -84,6 +85,7 @@
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
             width: 100%;
+            margin-bottom: 20px;
         }
         
         .btn:hover {
@@ -91,8 +93,12 @@
             box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
         
-        .btn:active {
-            transform: translateY(0);
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            box-shadow: 0 10px 20px rgba(108, 117, 125, 0.3);
         }
         
         .example {
@@ -114,49 +120,94 @@
             border-radius: 4px;
             font-family: 'Courier New', monospace;
             word-break: break-all;
+            display: block;
+            margin: 10px 0;
         }
         
         .instructions {
             background: #fff3cd;
             border: 1px solid #ffeaa7;
             border-radius: 8px;
-            padding: 20px;
+            padding: 25px;
             margin-top: 30px;
         }
         
         .instructions h3 {
             color: #856404;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .instructions ol {
             padding-left: 20px;
+            margin-bottom: 20px;
         }
         
         .instructions li {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             color: #856404;
+            line-height: 1.5;
+        }
+        
+        .tool-card {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .tool-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
         }
         
         .loading {
             display: none;
             text-align: center;
-            padding: 20px;
+            padding: 30px;
         }
         
         .spinner {
             border: 4px solid #f3f3f3;
             border-top: 4px solid #667eea;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
+            margin: 0 auto 20px;
         }
         
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        
+        .success {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            color: #28a745;
+        }
+        
+        .success-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        
+        .download-options {
+            background: #e8f4fd;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 30px 0;
         }
         
         @media (max-width: 600px) {
@@ -180,15 +231,54 @@
         <div class="content">
             <div class="form-group">
                 <label for="m3u8Url">Enter M3U8 URL:</label>
-                <input type="url" id="m3u8Url" placeholder="https://media-cdn.classplusapp.com/.../master.m3u8" autocomplete="off">
+                <input type="url" id="m3u8Url" 
+                       placeholder="https://media-cdn.classplusapp.com/.../master.m3u8" 
+                       autocomplete="off">
             </div>
             
-            <button class="btn" onclick="downloadVideo()">Download Lecture</button>
+            <button class="btn" onclick="downloadM3U8()">Download M3U8 File</button>
             
             <div class="loading" id="loading">
                 <div class="spinner"></div>
-                <p>Processing video... This may take a moment.</p>
-                <p><small>Please don't close this tab</small></p>
+                <p>Processing your request...</p>
+            </div>
+            
+            <div class="success" id="success">
+                <div class="success-icon">✓</div>
+                <h3>Download Started!</h3>
+                <p>Your M3U8 file is being downloaded.</p>
+                <p>Follow the instructions below to convert it to MP4.</p>
+            </div>
+            
+            <div class="download-options">
+                <h3>How to Convert M3U8 to MP4:</h3>
+                <p>After downloading the M3U8 file, use one of these tools:</p>
+                
+                <div class="tool-card">
+                    <h4>🎥 VLC Media Player (Free)</h4>
+                    <ol>
+                        <li>Open VLC Player</li>
+                        <li>Go to Media → Convert/Save</li>
+                        <li>Add your M3U8 file</li>
+                        <li>Choose MP4 format and destination</li>
+                        <li>Click Start</li>
+                    </ol>
+                </div>
+                
+                <div class="tool-card">
+                    <h4>⚡ FFmpeg (Command Line)</h4>
+                    <code>ffmpeg -i "your-file.m3u8" -c copy "lecture.mp4"</code>
+                </div>
+                
+                <div class="tool-card">
+                    <h4>🌐 Online Converters</h4>
+                    <p>Use websites like:</p>
+                    <ul>
+                        <li>OnlineVideoConverter.com</li>
+                        <li>HLS.to</li>
+                        <li>Video.online-convert.com</li>
+                    </ul>
+                </div>
             </div>
             
             <div class="example">
@@ -197,22 +287,32 @@
             </div>
             
             <div class="instructions">
-                <h3>How to get the M3U8 URL:</h3>
+                <h3>📋 How to get the M3U8 URL:</h3>
                 <ol>
-                    <li>Open the Classplus lecture in your browser</li>
-                    <li>Right-click and select "Inspect" or press F12</li>
-                    <li>Go to the Network tab</li>
-                    <li>Play the video and look for ".m3u8" files</li>
-                    <li>Right-click the m3u8 request and copy the URL</li>
+                    <li>Open Classplus lecture in Chrome/Firefox</li>
+                    <li>Press <strong>F12</strong> or Right-click → Inspect</li>
+                    <li>Go to <strong>Network</strong> tab</li>
+                    <li>Refresh page and play the video</li>
+                    <li>Look for <strong>.m3u8</strong> files</li>
+                    <li>Right-click the request → Copy → Copy link address</li>
                 </ol>
+                
+                <h3>🔧 Browser Extensions (Easy Way):</h3>
+                <p>Install these extensions to detect M3U8 URLs automatically:</p>
+                <ul>
+                    <li><strong>Stream Video Downloader</strong> (Chrome/Firefox)</li>
+                    <li><strong>HLS Downloader</strong></li>
+                    <li><strong>Video DownloadHelper</strong></li>
+                </ul>
             </div>
         </div>
     </div>
 
     <script>
-        async function downloadVideo() {
+        async function downloadM3U8() {
             const urlInput = document.getElementById('m3u8Url');
             const loadingDiv = document.getElementById('loading');
+            const successDiv = document.getElementById('success');
             const url = urlInput.value.trim();
             
             if (!url) {
@@ -227,6 +327,7 @@
             
             // Show loading
             loadingDiv.style.display = 'block';
+            successDiv.style.display = 'none';
             
             try {
                 // Create download link
@@ -235,20 +336,19 @@
                 // Create invisible link and click it
                 const link = document.createElement('a');
                 link.href = apiUrl;
-                link.download = 'lecture.mp4';
+                link.download = 'lecture.m3u8';
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
                 
-                // Show success message after a delay
+                // Show success after a delay
                 setTimeout(() => {
-                    loadingDiv.innerHTML = `
-                        <div style="color: #28a745; font-size: 48px; margin-bottom: 15px;">✓</div>
-                        <p>Download started!</p>
-                        <p><small>If download doesn't start, check your browser's download settings</small></p>
-                        <button class="btn" onclick="resetForm()" style="margin-top: 20px; background: #28a745;">Download Another</button>
-                    `;
-                }, 2000);
+                    loadingDiv.style.display = 'none';
+                    successDiv.style.display = 'block';
+                    
+                    // Scroll to success message
+                    successDiv.scrollIntoView({ behavior: 'smooth' });
+                }, 1000);
                 
             } catch (error) {
                 loadingDiv.style.display = 'none';
@@ -257,20 +357,20 @@
             }
         }
         
-        function resetForm() {
-            document.getElementById('m3u8Url').value = '';
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('loading').innerHTML = `
-                <div class="spinner"></div>
-                <p>Processing video... This may take a moment.</p>
-                <p><small>Please don't close this tab</small></p>
-            `;
-        }
+        // Example URL for testing
+        document.getElementById('m3u8Url').value = 'https://media-cdn.classplusapp.com/393341/cc/e6469459f6e7421c8c4afbf975f199ab-qv/master.m3u8';
         
         // Allow Enter key to trigger download
         document.getElementById('m3u8Url').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-                downloadVideo();
+                downloadM3U8();
+            }
+        });
+        
+        // Copy example URL on click
+        document.getElementById('m3u8Url').addEventListener('click', function() {
+            if (this.value.includes('example')) {
+                this.select();
             }
         });
     </script>
